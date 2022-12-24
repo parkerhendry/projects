@@ -1,6 +1,4 @@
-//Sortit
 //Parker Hendry
-//CSCI271
 /*
 This program will sort lines of strings lexicographically. The algorithm used is based on a version of mergesort. This program
 will accept input files and standard input.

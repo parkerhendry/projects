@@ -1,6 +1,4 @@
 //Parker Hendry
-//hendryp2@winthrop.edu
-//CSCI 271
 /*
 This program will accept either one or two command line arguments. The first command line argument accepts a word search grid and the second accepts a list of words to search for. If the second command line argument is absent then the user is prompted for a word to search for.
 */

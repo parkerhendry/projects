@@ -1,5 +1,5 @@
 # Set Operations Assignment
-In this assignment, I created a Javascript application that will perform set operations on integer sets.The set operations include union, intersection, and set difference. The application supports a switch argument and two arguments that hold sets. The switch argument represents the set operation, and the application also includes a help switch. Use '' to denote sets. 
+In this assignment, I created a Javascript application that will perform set operations on integer sets.The set operations include union, intersection, and set difference. The application supports a switch argument and two arguments that hold sets. The switch argument represents the set operation, and the application also includes a help switch. Use '' to denote sets and , to separate values within the set. 
 # Instructions for use
 node set.js [OPTION] ['SET1'] ['SET2'] 
 # Options

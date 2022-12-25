@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "twilio": "^3.84.0"
+  },
+  "name": "highlow",
+  "description": "This app uses Express and Twilio to create an SMS high-low game. Each time a text is sent to Twilio, Twilio makes an HTTP POST request to the Express web server. This app then creates the appropriate response based on the request.  # Instructions for use After starting the web server and exposing it using ngrok, text Twilio to begin the game.  # Credits #### Parker Hendry #### hendryp2@winthrop.edu",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Parker Hendry",
+  "license": "ISC"
+}

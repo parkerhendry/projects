@@ -1,0 +1,17 @@
+{
+  "name": "amazonreviews",
+  "version": "1.0.0",
+  "description": "This program will count the number of helpful votes and unhelpful votes from a large .tsv file of Amazon reviews and compute the average of helpful votes and unhelpful votes. ",
+  "main": "amazon.js",
+  "type": "module",
+  "dependencies": {
+    "big.js": "^6.2.1",
+    "d3-dsv": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node amazon.js"
+  },
+  "author": "Parker Hendry",
+  "license": "ISC"
+}

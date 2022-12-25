@@ -1,0 +1,11 @@
+{
+  "name": "fibonaccianalysis",
+  "version": "1.0.0",
+  "description": "This Javascript app will print each fibonacci number up to the number given by the user. Two methods are available for computing the fibonacci numbers: recursion and iteration. The method is chosen by the switch entered by the user. Both methods are timed, which can be used for empirical analysis. The two analysis files show the time difference of the two methods.",
+  "main": "fibonacci.js",
+  "scripts": {
+    "test": "node fibonacci.js [OPTION] [NUMBER]"
+  },
+  "author": "Parker Hendry",
+  "license": "ISC"
+}

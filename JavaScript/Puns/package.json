@@ -1,0 +1,16 @@
+{
+  "name": "puns",
+  "version": "1.0.0",
+  "description": "The application pun.js will print a pun and a punchline. Using command line switches, puns can be searched by keyword or they can be searched for by ID number. The pun and the punchline will be printed in different colors.",
+  "main": "pun.js",
+  "dependencies": {
+    "puns.dev": "^0.2.2",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "pun.js [OPTIONS]"
+  },
+  "author": "Parker Hendry",
+  "license": "ISC"
+}

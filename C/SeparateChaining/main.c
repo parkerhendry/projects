@@ -7,6 +7,7 @@ This program is an implementation of an integer hash table using the separate ch
 #include <ctype.h>
 #include "List.h"
 
+int keys = 0;
 
 //Function for inserting into table
 void insert(struct List *table[], int n, int num)
@@ -73,6 +74,7 @@ void delete(struct List *table[], int n)
 		free(temp);
 		
 		printf("***Successfully deleted at address %d after %d key comparison.***\n", mod, count);
+		keys--;
 	}
 	else
 	{
@@ -94,6 +96,7 @@ void delete(struct List *table[], int n)
 				free(temp);
 				
 				printf("***Successfully deleted at address %d after %d key comparisons.***\n", mod, count);
+				keys--;
 				
 				return;	
 			}
@@ -241,8 +244,6 @@ void rehash(struct List *table[], struct List *new[], int n, int old)
 int main()
 {	
 	int n, num;
-	
-	int keys = 0;
 
 	//Prompt user for initial storage
 	printf("How many numbers would you like to store in the table initially?\n");
@@ -298,7 +299,6 @@ int main()
 		else if (choice == 'd')
 		{
 			delete(table, n);
-			keys--;
 		}
 		else if (choice == 's')
 		{

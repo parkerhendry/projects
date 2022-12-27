@@ -1,3 +1,4 @@
 *.class
 *.tsv
+*.o
 node_modules/

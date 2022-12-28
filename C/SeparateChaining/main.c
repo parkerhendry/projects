@@ -235,7 +235,7 @@ void rehash(struct List *table[], struct List *new[], int n, int old)
 	
 	for (int i = 0; i < n; i++)
 	{
-		table[i] = NULL;
+		table[i] = NULL;		
 	}
 	
 	copy(table, new, n);

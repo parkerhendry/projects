@@ -5,12 +5,16 @@ using namespace std;
 template <class T>
 void Tree<T>::insert(T data)
 {
-	Node *newNode = new Node;
-	
+	cout << "Inserting " << data << endl;
+
+	//Create new node to be inserted
+	Node *newNode = new Node();	
 	newNode->data = data;
 	newNode->left = NULL;
 	newNode->right = NULL;
 	
+	//Find correct location in tree for insertion
+	//Then insert using parent node
 	if (head == NULL)
 		head = newNode;
 	else
@@ -32,29 +36,70 @@ void Tree<T>::insert(T data)
 			}	
 		}
 		
+		
 		if (parent->data < data)
 			parent->right = newNode;
 		else
 			parent->left = newNode;
-	}	
+		
+		
+	}
+	
+		
 	
 	
 }	
 
+//Function used to call printing functions due to recursion
 template <class T>
 void Tree<T>::callPrint()
 {
-	print(head);
+	cout << "\nIn-order Traversal: \n";
+	inOrder(head);
+	
+	cout << "\nPre-order Traversal: \n";
+	preOrder(head);
+	
+	cout << "\nPost-order Traversal: \n";
+	postOrder(head);
 }
 
+//Function for inorder traversal
+//(left subtree, root, right subtree)
 template <class T>
-void Tree<T>::print(Node *current)
+void Tree<T>::inOrder(Node *current)
 {
 	if (current != NULL)
 	{
-		print(current->left);
+		inOrder(current->left);
 		cout << current->data << endl;
-		print(current->right);
+		inOrder(current->right);
+	}
+}
+
+//Function for preorder traversal
+//(root, left subtree, right subtree)
+template <class T>
+void Tree<T>::preOrder(Node *current)
+{
+	if (current != NULL)
+	{
+		cout << current->data << endl;
+		preOrder(current->left);
+		preOrder(current->right);
+	}
+}
+
+//Function for posorder traversal
+//(left subtree, right subtree, root)
+template <class T>
+void Tree<T>::postOrder(Node *current)
+{
+	if (current != NULL)
+	{
+		postOrder(current->left);
+		postOrder(current->right);
+		cout << current->data << endl;
 	}
 }
 

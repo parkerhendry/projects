@@ -1,9 +1,11 @@
 #ifndef TREE_H
 #define TREE_H
 
+//Template class for binary search tree
 template <class T>
 class Tree
 {
+	//Nodes in the tree
 	struct Node
 	{
 		T data;
@@ -18,9 +20,10 @@ class Tree
 		Tree() { head = NULL; }
 		
 		void insert(T);
-		void balance();
 		void callPrint();
-		void print(Node*);
+		void inOrder(Node*);
+		void preOrder(Node*);
+		void postOrder(Node*);
 		
 };
 

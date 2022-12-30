@@ -249,7 +249,7 @@ int main()
 	printf("How many numbers would you like to store in the table initially?\n");
 	scanf("%d", &n);
 	
-	struct List **table = (struct List**)malloc(n * sizeof(struct List));
+	struct List **table = (struct List**)malloc(n * sizeof(struct List*));
 	
 	for (int i = 0; i < n; i++)
 	{
@@ -311,7 +311,7 @@ int main()
 			printf("What size would you like the new table to be?\n");
 			scanf("%d", &n);
 	
-			struct List **new = (struct List**)malloc(n * sizeof(struct List));
+			struct List **new = (struct List**)malloc(n * sizeof(struct List*));
 		
 			for (int i = 0; i < n; i++)
 			{

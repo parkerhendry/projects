@@ -28,18 +28,18 @@ main:
         sub    $16, %rsp		#Allocate space on stack (aligned boundary)
         mov    $num1, %rdi		#Move num1 prompt to arg1
         call    printf			#Call printf
-        lea    -4(%rbp), %rax		#Load address of a into return
+        lea    -8(%rbp), %rax		#Load address of a into return
         mov    %rax, %rsi		#Move address of a into arg2
         mov    $input, %rdi		#Move input prompt to arg1
         call    scanf			#Call scanf
         mov    $num2, %rdi		#Move num2 prompt to arg1
         call    printf			#Call printf
-        lea    -8(%rbp), %rax		#Load address of b into return
+        lea    -16(%rbp), %rax		#Load address of b into return
         mov    %rax, %rsi		#Move address of b into arg2
         mov    $input, %rdi		#Move input prompt to arg1
         call    scanf			#Call scanf
-        mov    -8(%rbp), %rsi		#Move b to arg2
-        mov    -4(%rbp), %rdi		#Move a to arg1
+        mov    -16(%rbp), %rsi		#Move b to arg2
+        mov    -8(%rbp), %rdi		#Move a to arg1
         call    gcd			#Call gcd
         mov    %rax, %rsi		#Move result to arg2
         mov    $answer, %rdi		#Move answer prompt to arg1
@@ -52,8 +52,8 @@ main:
 num1:
         .string "Enter the first number: "
 input:
-        .string "%d"
+        .string "%ld"
 num2:
         .string "Enter the second number: "
 answer:
-        .string "The greatest common divisor is %d\n"
+        .string "The greatest common divisor is %ld\n"

@@ -1,0 +1,101 @@
+doctype html
+head
+  title Parkerbook
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js')
+  style.
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+    /* Set gray background color and 100% height */
+    .sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    }
+    /* Set black background color, white text and some padding */
+    footer {
+    background-color: #555;
+    color: white;
+    padding: 15px;
+    }
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+    .sidenav {
+    height: auto;
+    padding: 15px;
+    }
+    .row.content {height: auto;}
+    }
+.container-fluid
+  .row.content
+    .col-sm-3.sidenav
+      h3 Parkerbook
+      ul.nav.nav-pills.nav-stacked
+        li.active
+          a(href='/') Home
+        li
+          a(href='/profile') Profile
+        //li
+          a(href='/messages') Direct Messages
+        li
+          a(href='/newpost') New Post +
+      br
+      form(action = "/search" method = "POST")      
+        .input-group
+          input#search.form-control(type='text', name='search', placeholder='Search Parkerbook..')
+          span.input-group-btn
+            button.btn.btn-default(type='Submit')
+              span.glyphicon.glyphicon-search
+      hr
+      ul.nav.navbar-nav.navbar-bottom
+        if !loggedIn
+          li
+            a(href='/signup')
+              span.glyphicon.glyphicon-user
+              |  Sign Up
+          li
+            a(href='/login')
+              span.glyphicon.glyphicon-log-in
+              |  Login
+        if loggedIn
+          li
+            a(href='/logout')
+              span.glyphicon.glyphicon-log-out
+              |  Logout
+    .container.text-center
+      .row  
+        .col-sm-9
+          h4
+            small ALL POSTS
+          hr
+          each item in response
+            h2 #{item.topic}
+            h5  
+              span.glyphicon.glyphicon-time
+              |  Post by #{item.id} at #{item.date}
+            h5
+              span.label.label-primary #{item.category}
+            div
+              if item.data
+                img.img-rounded(src='data:image/jpg;charset=utf-8;base64, ' + item.data, alt='picture', height='300', width='300')
+              p #{item.body}
+            br
+            form(action = "/foopost" method = "POST")
+              input#postID(type='hidden', name='postID', value=item.id)
+              input#postDate(type='hidden', name='postDate', value=item.date)
+              input#postTopic(type='hidden', name='postTopic', value=item.topic)
+              button.btn.btn-primary.btn-block.mb-4(type = "Submit") View Post 
+            br
+            form(action = "/fooprofile" method = "POST")
+              input#postID(type='hidden', name='postID', value=item.id)
+              input#postDate(type='hidden', name='postDate', value=item.date)
+              input#postTopic(type='hidden', name='postTopic', value=item.topic)
+              button.btn.btn-primary.btn-block.mb-4(type = "Submit") View #{item.id}'s Profile  
+            hr
+        br
+        br
+footer.container-fluid
+  p Created by Parker Hendry, May 2023
+

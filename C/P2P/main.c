@@ -36,7 +36,7 @@ void *server()
 	char temp[1024] = { 0 };	
 	struct ifreq ifr;
 
-	// Creating socket file descriptor
+	// Create server socket descriptor
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
 	{
 		perror("socket failed");
@@ -47,20 +47,18 @@ void *server()
 		printf("Socket created.\n");
 	}
 
-	// Forcefully attaching socket to the port 8080
 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) 
 	{
 		perror("setsockopt");
 		exit(EXIT_FAILURE);
-	}
-	
+	}	
 
 	address.sin_family = AF_INET;
 	address.sin_port = htons(PORT);	
 	ifr.ifr_addr.sa_family = AF_INET;	
 	address.sin_addr.s_addr = INADDR_ANY;
 
-	// Forcefully attaching socket to the port 8080
+	//Bind socket to port
 	if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) 
 	{
 		perror("bind failed");
@@ -71,6 +69,7 @@ void *server()
 		printf("Bind successful.\n");
 	}
 	
+	//Listen for incoming connection
 	if (listen(server_fd, 3) < 0) {
 		perror("listen");
 		exit(EXIT_FAILURE);
@@ -80,6 +79,7 @@ void *server()
 		printf("Listening...\n");
 	}
 	
+	//Accept client connection if received
 	if ((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0) {
 		perror("accept");
 		exit(EXIT_FAILURE);
@@ -93,6 +93,7 @@ void *server()
 	{
 		char foo[50];
 	
+		//Get command from client
 		valread = read(new_socket, foo, 50);
 		
 		char words[15][15];
@@ -103,7 +104,8 @@ void *server()
 			
 		if (strlen(foo) > 1)
 		{
-				
+		
+		//Split command into words		
 		for (int i = 0; i < strlen(foo); i++)
 		{
 			if (foo[i] == ' '  || foo[i] == '\0')
@@ -123,9 +125,11 @@ void *server()
 		
 		if (strcmp(words[0], cd) == 0)
 		{	
+			//Client enters cd [PATH]
 		
 			words[1][strcspn(words[1], "\n")] = 0;
 		
+			//Change directory to the path entered by client
 			chdir(words[1]);
 			
 			char ch[50];
@@ -137,11 +141,13 @@ void *server()
 			
 			memset(buffer.contents, 0, BUFFER_SIZE);
 			
+			//Print new current directory into buffer, which will be sent back to client
 			sprintf(buffer.contents, "%s", bar);
 			buffer.file = 0;
 		}
 		else if (strcmp(words[0], download) == 0)
 		{
+			//Client enters download [FILE]
 			
 			words[1][strcspn(words[1], "\n")] = 0;
 		
@@ -152,6 +158,8 @@ void *server()
 			
 			fp = fopen(words[1], "r");
 			
+			//If file can't be opened, print error into buffer
+			//Otherwise, print file contents into buffer
 			if (fp == NULL)
 			{
 				sprintf(buffer.contents + strlen(buffer.contents), "%s", "File cannot be opened at this location.\n");
@@ -173,10 +181,13 @@ void *server()
 		else
 		{
 		
+			//Else attempt shell command with client command
+		
 			FILE *fp;
 		
 			fp = popen(foo, "r");
 		
+			//If shell command can't be executed, print error to buffer
 			if (fp == NULL) 
 			{
     				printf("Failed to run command\n" );
@@ -186,6 +197,7 @@ void *server()
 			memset(buffer.contents, 0, BUFFER_SIZE);
 			buffer.file = 0;
 		
+			//Print output of command to buffer
 	 		while (fgets(temp, 1024, fp) != NULL)
 			{	
 				sprintf(buffer.contents + strlen(buffer.contents), "%s", temp);	
@@ -195,6 +207,7 @@ void *server()
 		
 		}
 		
+		//Send buffer to client
 		send(new_socket, (char *)&buffer, sizeof(buffer), 0);
 		
 		memset(buffer.contents, 0, BUFFER_SIZE);
@@ -214,6 +227,7 @@ int main(int argc, char const* argv[])
 {
 	pthread_t server_thread;     
         
+        //Create separate thread to handle server
         if (pthread_create(&server_thread, NULL, server, NULL) != 0) 
         {
             perror("Error in creating server thread.");
@@ -227,6 +241,7 @@ int main(int argc, char const* argv[])
 	char temp[1024] = { 0 };
 	struct ifreq ifr;
 	
+	//Create client socket descriptor
 	if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
 	{
 		printf("\n Socket creation error \n");
@@ -240,7 +255,7 @@ int main(int argc, char const* argv[])
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORT);
 	
-	
+	//Print ip of local machine
 	ifr.ifr_addr.sa_family = AF_INET;	
 	strncpy(ifr.ifr_name, "wlp2s0", IFNAMSIZ - 1);	
 	ioctl(client_fd, SIOCGIFADDR, &ifr);	
@@ -252,16 +267,18 @@ int main(int argc, char const* argv[])
 	
 	char ip[12];
 	
+	//Get ip of server from user
 	printf("Please enter the ip address of the client you would like to connect to.\n");
 	scanf("%s", ip);
 
+	//Convert ip address entered by user to binary
 	while (inet_pton(AF_INET, ip, &serv_addr.sin_addr) <= 0) 
 	{	
 		printf("Invalid address. Please try again.\n");
 		scanf("%s", ip);		
 	}
 	
-	
+	//Connect to server 
 	if ((status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))) < 0) 
 	{
 		printf("\nConnection Failed \n");
@@ -284,25 +301,33 @@ int main(int argc, char const* argv[])
 		char foo[50];
 		char ch[30];
 	
+		//Get command from user
 		fgets(foo, 30, stdin);
 	
+		//Send that command to server
 		send(client_fd, foo, 50, 0);
 		
+		//Wait for server
 		sleep(1);
 
+		//Read response from server
 		valread = read(client_fd, (char *)&buffer, sizeof(buffer));
 		
 		if (buffer.file == 1)
 		{
+			//If file downloaded from server
 		
+			//Select where to save the file
 			printf("Current directory: %s\n", getcwd(ch, 30));
 			printf("Enter a path to save the file: ");
 			fgets(foo, 30, stdin);
 			
 			foo[strcspn(foo, "\n")] = 0;
 			
+			//Move to the directory entered
 			chdir(foo);
 			
+			//Select name of the file to be saved
 			printf("Current directory: %s\n", getcwd(ch, 30));			
 			printf("Name of the file: ");
 			fgets(foo, 30, stdin);
@@ -311,6 +336,7 @@ int main(int argc, char const* argv[])
 			
 			FILE *fp;
 			
+			//Create file
 			fp = fopen(foo, "w");
 			
 			if (fp == NULL)
@@ -319,7 +345,7 @@ int main(int argc, char const* argv[])
 			}
 			else
 			{
-			
+				//Move buffer contents to file
 				fprintf(fp, "%s", buffer.contents);
 			
 				printf("File saved!\n");
@@ -332,7 +358,9 @@ int main(int argc, char const* argv[])
 		}
 		else
 		{
+			//If file not downloaded from server
 	
+			//Print output of command
 			fputs(buffer.contents, stdout);
 			
 		
@@ -347,6 +375,7 @@ int main(int argc, char const* argv[])
 	// closing the connected socket
 	close(client_fd);
         
+        //Detach server thread
         if (pthread_detach(server_thread) != 0) {
             perror("Error in detaching server thread.");
             exit(1);

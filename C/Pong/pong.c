@@ -4,6 +4,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
+//Struct used to form paddles
 struct Paddle
 {
 	int x;
@@ -11,6 +12,7 @@ struct Paddle
 	struct Paddle *next;
 };
 
+//Create right paddle by initializing 4 paddle points and stacking them
 struct Paddle* initRight()
 {
 	struct Paddle *right1 = malloc(sizeof(*right1));
@@ -34,6 +36,7 @@ struct Paddle* initRight()
 	return right1;	
 }  
 
+//Create left paddle by initializing 4 paddle points and stacking them
 struct Paddle* initLeft()
 {
 	struct Paddle *left1 = malloc(sizeof(*left1));
@@ -57,6 +60,7 @@ struct Paddle* initLeft()
 	return left1;	
 } 
 
+//Move paddle up by modifying y value of each point
 void moveUp(struct Paddle *bar)
 {
 	int test = bar->y - 1;
@@ -75,6 +79,7 @@ void moveUp(struct Paddle *bar)
 	}	
 }
 
+//Move paddle down by modifying y value of each point
 void moveDown(struct Paddle *bar)
 {
 	int test = bar->y + 4;
@@ -93,6 +98,7 @@ void moveDown(struct Paddle *bar)
 
 int main()
 {
+	//Initilize ncurses window for game
 	initscr();
 	keypad(stdscr, TRUE);
 	cbreak();
@@ -102,19 +108,24 @@ int main()
 	
 	clear();
 	
+	//Points to hold location of ball
 	int tempX = 1;
 	int tempY = 1;
 	
+	//Create left and right paddle
 	struct Paddle *left = initLeft();
 	struct Paddle *right = initRight();
 	
+	//Points to hold direction of ball
 	int fredX = 1;
 	int fredY = 1;
 	
 	while (1)
 	{
 		clear();
-		
+
+		//If ball hits top or bottom of window, redirect
+		//If ball hits left or right of window, the round is over		
 		if (tempY == LINES - 1)
 			fredY = -1;
 		else if (tempY == 0)
@@ -125,22 +136,27 @@ int main()
 		struct Paddle *current = left;
 		int counter = 0;
 		
+		//Traverse left paddle
 		while (current)
 		{
+			//Print paddle point on screen
 			mvaddch(current->y, current->x, ACS_BLOCK);
-						
+			
+			//If ball hits top of paddle, change direction to northeast		
 			if ((current->y == tempY && current->x == tempX) && counter < 2)
 			{
 				fredY = -1;
 				fredX = 1;
 			}
 			
+			//If ball hits bottom of paddle, change direction to southeast
 			if ((current->y == tempY && current->x == tempX) && counter >= 2)
 			{
 				fredY = 1;
 				fredX = 1;
 			}
-						
+			
+			//Move to next point			
 			current = current->next;
 			
 			counter++;
@@ -149,34 +165,42 @@ int main()
 		current = right;
 		counter = 0;
 		
+		//Traverse right paddle
 		while (current)
 		{
+			//Print paddle point on screen
 			mvaddch(current->y, current->x, ACS_BLOCK);
-						
+				
+			//If ball hits top of paddle, change direction to northwest		
 			if ((current->y == tempY && current->x == tempX) && counter < 2)
 			{
 				fredY = -1;
 				fredX = -1;
 			}
 			
+			//If ball hits bottom of paddle, change direction to southwest
 			if ((current->y == tempY && current->x == tempX) && counter >= 2)
 			{
 				fredY = 1;
 				fredX = -1;
 			}
 			
+			//Move to next point
 			current = current->next;
 			
 			counter++;
 		}
 		
+		//Move ball
 		tempY += fredY;
 		tempX += fredX;
 		
+		//Print ball on screen
 		mvaddch(tempY, tempX, ACS_DIAMOND);
 		
 		refresh();
 		
+		//Get characters from users and move paddles based on characters entered
 		int ch = getch();
 		
 		switch(ch)

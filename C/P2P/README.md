@@ -5,7 +5,7 @@ download file.txt
 ````
 In this case, file.txt represents a file from a node that you are currently connected to and would like to download it to your own machine.
 
-PS: IF you would like your correct IP address to be shown, please change line 245 to your correct network interface. The application will work fine without this, but your IP address will be printed as 0.0.0.0.
+PS: If you are using a network interface other than wlp2s0, and you would like your correct IP address to be shown, please change line 245 to your correct network interface. The application will work fine without this, but your IP address will be printed as 0.0.0.0.
 # Instructions for use
 ````
 make

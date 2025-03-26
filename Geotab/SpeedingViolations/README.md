@@ -63,5 +63,3 @@ The application also includes:
 
 ---
 
-Let me know if you want to add more details! 🚀
-

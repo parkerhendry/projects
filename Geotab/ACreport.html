@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Reports Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --primary-color-hover: #003d7a;
+            --secondary-color: #6c757d;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            flex-direction: column;
+        }
+        
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            max-height: 80px;
+            margin-right: 20px;
+        }
+        
+        .header-text {
+            flex-grow: 1;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            transition: transform 0.2s;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .report-card {
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 30px;
+            border-radius: 6px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-color-hover);
+            border-color: var(--primary-color-hover);
+        }
+        
+        .report-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .report-date {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .report-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+        
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container mt-4">
+        <!-- Header with Logo -->
+        <div class="logo-container">
+            <img src="https://traxxisgps.com/wp-content/uploads/elementor/thumbs/Traxxis-refresh-logo_horizontal-min-1-qjgvd5cr9kxu5eay6trn10pbylz31ardqnqdluuew0.webp" alt="Company Logo" class="logo" id="companyLogo">
+            <div class="header-text">
+                <h1 class="mb-0">Traxxis Reports Dashboard</h1>
+                <p class="text-muted">Generate and download reports for your fleet</p>
+            </div>
+        </div>
+        
+        <!-- Report Cards Section -->
+        <div class="row">
+            <!-- Speed Violations Report Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 report-card" id="speedViolationsCard">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="report-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h3 class="card-title">Speed Violations Report</h3>
+                            <p class="report-description">
+                                Generate a report of all speed violations across your fleet.
+                            </p>
+                        </div>
+                        <div class="report-footer">
+                            <div class="report-date" id="speedLastGenerated">
+                                Last generated: Never
+                            </div>
+                            <button class="btn btn-primary" id="generateSpeedReportBtn">
+                                Generate <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Placeholder Report Card (Disabled) -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 report-card bg-light">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="report-icon text-secondary">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="card-title text-secondary">Idle Time Report</h3>
+                            <p class="report-description text-secondary">
+                                Analyze vehicle idle times to improve fuel efficiency and reduce emissions.
+                            </p>
+                        </div>
+                        <div class="report-footer">
+                            <div class="report-date text-secondary">
+                                Coming soon
+                            </div>
+                            <button class="btn btn-secondary" disabled>
+                                Generate <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Placeholder Report Card 2 (Disabled) -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 report-card bg-light">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="report-icon text-secondary">
+                                <i class="fas fa-route"></i>
+                            </div>
+                            <h3 class="card-title text-secondary">Route Efficiency Report</h3>
+                            <p class="report-description text-secondary">
+                                Evaluate route efficiency and identify opportunities for optimization.
+                            </p>
+                        </div>
+                        <div class="report-footer">
+                            <div class="report-date text-secondary">
+                                Coming soon
+                            </div>
+                            <button class="btn btn-secondary" disabled>
+                                Generate <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Placeholder Report Card 3 (Disabled) -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 report-card bg-light">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="report-icon text-secondary">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h3 class="card-title text-secondary">Maintenance Report</h3>
+                            <p class="report-description text-secondary">
+                                Track maintenance schedules and identify vehicles requiring service.
+                            </p>
+                        </div>
+                        <div class="report-footer">
+                            <div class="report-date text-secondary">
+                                Coming soon
+                            </div>
+                            <button class="btn btn-secondary" disabled>
+                                Generate <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Message Area -->
+        <div id="statusMessage" class="mt-3"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="spinner-border text-light mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h4 id="loadingMessage">Processing...</h4>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const generateSpeedReportBtn = document.getElementById("generateSpeedReportBtn");
+            const speedViolationsCard = document.getElementById("speedViolationsCard");
+            const statusMessage = document.getElementById("statusMessage");
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            const loadingMessage = document.getElementById("loadingMessage");
+            const speedLastGenerated = document.getElementById("speedLastGenerated");
+
+            function showLoading(message) {
+                loadingMessage.textContent = message || "Processing...";
+                loadingOverlay.style.display = "flex";
+            }
+
+            function hideLoading() {
+                loadingOverlay.style.display = "none";
+            }
+
+            function updateStatus(message, isError = false) {
+                statusMessage.innerHTML = `<div class="alert ${isError ? "alert-danger" : "alert-info"}">${message}</div>`;
+                
+                // Auto-hide the message after 10 seconds if it's a success message
+                if (!isError) {
+                    setTimeout(() => {
+                        statusMessage.innerHTML = "";
+                    }, 10000);
+                }
+            }
+
+            function checkReportStatus() {
+                fetch("/api/report-status")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update loading message with current status
+                        if (data.message) {
+                            loadingMessage.textContent = data.message;
+                        }
+                        
+                        if (data.status === "complete") {
+                            hideLoading();
+                            updateStatus("Report generation complete. Downloading now...");
+                            
+                            // Update last generated date
+                            const now = new Date();
+                            speedLastGenerated.textContent = `Last generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+                            
+                            // Small delay to ensure the user sees the success message
+                            setTimeout(() => {
+                                window.location.href = "/api/download-report";
+                            }, 1000);
+                        } else if (data.status === "error") {
+                            hideLoading();
+                            updateStatus(`Error: ${data.message}`, true);
+                        } else {
+                            // Continue checking status
+                            setTimeout(checkReportStatus, 2000);
+                        }
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        updateStatus(`Error checking status: ${error.message}`, true);
+                        console.error("Error checking report status:", error);
+                    });
+            }
+
+            function generateSpeedReport() {
+                // Clear previous status
+                statusMessage.innerHTML = "";
+                
+                // Show loading overlay
+                showLoading("Starting speed violations report generation...");
+                
+                // Disable button to prevent multiple clicks
+                generateSpeedReportBtn.disabled = true;
+                
+                fetch("/api/generate-report", { 
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === "processing") {
+                            updateStatus("Report generation started...");
+                            checkReportStatus();
+                        } else {
+                            hideLoading();
+                            updateStatus(`Error: ${data.message}`, true);
+                            // Re-enable button
+                            generateSpeedReportBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        updateStatus(`Error: ${error.message}`, true);
+                        console.error("Error starting report generation:", error);
+                        // Re-enable button
+                        generateSpeedReportBtn.disabled = false;
+                    });
+            }
+
+            // Add event listeners
+            generateSpeedReportBtn.addEventListener("click", generateSpeedReport);
+            
+            // Make entire card clickable
+            speedViolationsCard.addEventListener("click", function(e) {
+                // Only trigger if the click wasn't on the button itself
+                if (!e.target.closest(".btn")) {
+                    generateSpeedReport();
+                }
+            });
+            
+            // Check for stored last generated date
+            const lastDate = localStorage.getItem("speedReportLastGenerated");
+            if (lastDate) {
+                speedLastGenerated.textContent = `Last generated: ${lastDate}`;
+            }
+        });
+    </script>
+</body>
+</html>

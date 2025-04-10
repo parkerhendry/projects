@@ -30,7 +30,7 @@ The application also includes:
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo-name.git
+   git clone https://github.com/parkerhendry/projects.git
    cd geotab-speed-report
    ```
 2. Install dependencies:
@@ -55,11 +55,4 @@ The application also includes:
 - `POST /api/generate-report` – Triggers report generation
 - `GET /api/report-status` – Checks report status
 - `GET /api/download-report` – Downloads the generated report
-
-## Future Enhancements
-- Additional report types (e.g., idle time, route efficiency)
-- Integration with cloud storage for report hosting
-- Advanced filtering and customization options
-
----
 

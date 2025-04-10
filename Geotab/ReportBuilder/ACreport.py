@@ -189,13 +189,7 @@ def authenticate_geotab():
     username = GEO_USER
     database = GEO_DATABASE
     
-    # For production use getpass, for development/testing use a hardcoded password
-    # In production environment, use environment variables or secure password storage
-    #try:
     password = GEO_PASSWORD
-    #except Exception:
-        # When running as a service, use environment variable
-        #password = os.environ.get("GEOTAB_PASSWORD", "")
         
     # Initialize MyGeotab API
     api = mygeotab.API(username=username, password=password, database=database)
